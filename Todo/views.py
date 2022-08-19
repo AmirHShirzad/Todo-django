@@ -1,5 +1,6 @@
 from asyncio import tasks
 from multiprocessing import context
+import re
 from django.shortcuts import render, redirect
 from .models import *
 from django.http import HttpResponse, JsonResponse
@@ -37,3 +38,15 @@ def update_task(request, pk):
     context = {'form': form}
 
     return render(request, 'Todo/update_task.html', context)
+
+
+def deleteTask(requset, pk):
+    item = Todo.objects.get(id=pk)
+
+    if requset.method == 'POST':
+        item.delete()
+        return redirect('/')
+
+    context = {'item': item}
+
+    return render(requset, 'Todo/delete.html', context)
